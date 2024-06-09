@@ -1,5 +1,11 @@
 package com.jsontextfield.scotiabanktakehome.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,18 +24,28 @@ fun RepoList(
     repos: List<GitHubRepo> = emptyList(),
     onItemClick: (GitHubRepo) -> Unit = {},
 ) {
-    LazyColumn {
-        items(repos) { repo ->
-            Card(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .clickable { onItemClick(repo) },
-                elevation = CardDefaults.cardElevation(10.dp)
-            ) {
-                ListItem(
-                    headlineContent = { Text(repo.name) },
-                    supportingContent = { Text(repo.description) },
-                )
+    AnimatedVisibility(
+        visible = repos.isNotEmpty(),
+        enter = fadeIn(animationSpec = tween(500)) + slideInVertically(animationSpec = tween(1000)),
+        exit = fadeOut(animationSpec = tween(500)) + slideOutVertically(animationSpec = tween(1000)),
+    ) {
+        LazyColumn {
+            items(repos) { repo ->
+                Card(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clickable { onItemClick(repo) },
+                    elevation = CardDefaults.cardElevation(10.dp)
+                ) {
+                    ListItem(
+                        headlineContent = { Text(repo.name) },
+                        supportingContent = {
+                            if (repo.description != "null" && repo.description.isNotEmpty()) {
+                                Text(repo.description)
+                            }
+                        },
+                    )
+                }
             }
         }
     }
