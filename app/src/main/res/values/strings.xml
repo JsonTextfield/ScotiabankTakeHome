@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">ScotiabankTakeHome</string>
+    <string name="title_activity_repo_details">RepoDetailsActivity</string>
+    <string name="search">Search</string>
+    <string name="clear">Clear</string>
+    <string name="back">Back</string>
+    <string name="last_updated">Last updated: %s</string>
+
+    <plurals name="stars">
+        <item quantity="zero">0 stars</item>
+        <item quantity="one">1 star</item>
+        <item quantity="other">%d stars</item>
+    </plurals>
+
+    <plurals name="forks">
+        <item quantity="zero">0 forks</item>
+        <item quantity="one">1 fork</item>
+        <item quantity="other">%d forks</item>
+    </plurals>
 </resources>
