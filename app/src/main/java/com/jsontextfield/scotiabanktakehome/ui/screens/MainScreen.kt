@@ -58,7 +58,7 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val mainState by mainViewModel.mainState.collectAsState()
-            val animationState = remember { MutableTransitionState(false) }
+            val animationState = remember { MutableTransitionState(true) }
 
             LaunchedEffect(mainState.lastUpdated) {
                 delay(1000)
