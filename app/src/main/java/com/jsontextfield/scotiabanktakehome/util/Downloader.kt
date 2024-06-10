@@ -19,17 +19,20 @@ object Downloader {
      * @param context a Context to be used by Volley
      * @param id a String that represents the username
      * @param onComplete a function that is called when data is successfully downloaded
+     * @param onError a function that is called when an error has occurred
      */
     fun downloadGitHubUserData(
         context: Context,
         id: String,
-        onComplete: (GitHubUser) -> Unit = {}
+        onComplete: (GitHubUser) -> Unit = {},
+        onError: () -> Unit = {},
     ) {
         val url = "https://api.github.com/users/$id"
         val jsonObjectRequest = JsonObjectRequest(url, {
             onComplete(GitHubUser.fromJson(it))
         }, {
             Log.e(TAG, it.toString())
+            onError()
         })
         Volley.newRequestQueue(context).add(jsonObjectRequest)
     }
@@ -39,11 +42,13 @@ object Downloader {
      * @param context a Context to be used by Volley
      * @param id a String that represents the username
      * @param onComplete a function that is called when data is successfully downloaded
+     * @param onError a function that is called when an error has occurred
      */
     fun downloadGitHubUserRepos(
         context: Context,
         id: String,
         onComplete: (List<GitHubRepo>) -> Unit = {},
+        onError: () -> Unit = {},
     ) {
         val url = "https://api.github.com/users/$id/repos"
         val jsonArrayRequest = JsonArrayRequest(url, { jsonArray ->
@@ -55,6 +60,7 @@ object Downloader {
             onComplete(result)
         }, {
             Log.e(TAG, it.toString())
+            onError()
         })
         Volley.newRequestQueue(context).add(jsonArrayRequest)
     }

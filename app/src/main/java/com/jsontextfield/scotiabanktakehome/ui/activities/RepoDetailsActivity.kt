@@ -20,7 +20,8 @@ class RepoDetailsActivity : ComponentActivity() {
             else {
                 intent.getParcelableExtra("repo")
             }
-        val totalForks = intent.getIntExtra("totalForks", 0)
+
+        val totalForks: Int = intent.getIntExtra("totalForks", 0)
 
         enableEdgeToEdge()
         setContent {
