@@ -1,5 +1,6 @@
 package com.jsontextfield.scotiabanktakehome.ui.screens
 
+import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -35,7 +36,9 @@ import com.jsontextfield.scotiabanktakehome.ui.activities.RepoDetailsActivity
 import com.jsontextfield.scotiabanktakehome.ui.components.RepoList
 import com.jsontextfield.scotiabanktakehome.ui.components.SearchBar
 import com.jsontextfield.scotiabanktakehome.ui.components.UserInfo
+import com.jsontextfield.scotiabanktakehome.ui.viewmodels.MainState
 import com.jsontextfield.scotiabanktakehome.ui.viewmodels.MainViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -58,10 +61,10 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
             modifier = Modifier.padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            val context = LocalContext.current
-            val scope = rememberCoroutineScope()
-            val mainState by mainViewModel.mainState.collectAsState()
-            var isVisible by rememberSaveable { mutableStateOf(false) }
+            val context : Context = LocalContext.current
+            val scope : CoroutineScope = rememberCoroutineScope()
+            val mainState : MainState by mainViewModel.mainState.collectAsState()
+            var isVisible : Boolean by rememberSaveable { mutableStateOf(false) }
 
             LaunchedEffect(mainState.lastUpdated) {
                 delay(500)
@@ -105,7 +108,7 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                 RepoList(mainState.repos) {
                     // get the sum of all the forks of the user's repos
                     val totalForks: Int = mainState.repos
-                        .map { it.forks }
+                        .map { repo -> repo.forks }
                         .reduce { a, b -> a + b }
 
                     val intent = Intent(context, RepoDetailsActivity::class.java)

@@ -19,24 +19,37 @@ class MainViewModel : ViewModel() {
     }
 
     fun getUserData(context: Context) {
-        Downloader.downloadGitHubUserData(context, _mainState.value.searchText) { user ->
-            _mainState.update {
-                it.copy(
-                    user = user,
-                    lastUpdated = System.currentTimeMillis(),
-                )
-            }
-        }
+        Downloader.downloadGitHubUserData(
+            context,
+            _mainState.value.searchText,
+            onComplete = { user ->
+                _mainState.update {
+                    it.copy(
+                        user = user,
+                        lastUpdated = System.currentTimeMillis(),
+                    )
+                }
+            },
+            onError = {
+                // update the UI state to show an error
+            },
+        )
     }
 
     fun getUserRepos(context: Context) {
-        Downloader.downloadGitHubUserRepos(context, _mainState.value.searchText) { repos ->
-            _mainState.update {
-                it.copy(
-                    repos = repos,
-                    lastUpdated = System.currentTimeMillis(),
-                )
-            }
-        }
+        Downloader.downloadGitHubUserRepos(
+            context, _mainState.value.searchText,
+            onComplete = { repos ->
+                _mainState.update {
+                    it.copy(
+                        repos = repos,
+                        lastUpdated = System.currentTimeMillis(),
+                    )
+                }
+            },
+            onError = {
+                // update the UI state to show an error
+            },
+        )
     }
 }
