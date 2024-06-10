@@ -2,7 +2,6 @@ package com.jsontextfield.scotiabanktakehome.ui.screens
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -19,12 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,7 +48,9 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
             TopAppBar(
                 modifier = Modifier.shadow(10.dp),
                 title = { Text(stringResource(R.string.app_name)) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Unspecified)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                ),
             )
         },
     ) { innerPadding ->
@@ -58,11 +61,11 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val mainState by mainViewModel.mainState.collectAsState()
-            val animationState = remember { MutableTransitionState(true) }
+            var isVisible by rememberSaveable { mutableStateOf(false) }
 
             LaunchedEffect(mainState.lastUpdated) {
-                delay(1000)
-                animationState.targetState = true
+                delay(500)
+                isVisible = true
             }
 
             SearchBar(
@@ -70,8 +73,8 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                 onTextChanged = { mainViewModel.onSearchTextChanged(it) },
                 onSearchButtonPressed = {
                     scope.launch {
-                        animationState.targetState = false
-                        delay(1000)
+                        isVisible = false
+                        delay(500)
                         mainViewModel.getUserData(context)
                         mainViewModel.getUserRepos(context)
                     }
@@ -79,26 +82,24 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
             )
 
             AnimatedVisibility(
-                visibleState = animationState,
-                enter = fadeIn(
-                    tween(500)
-                ) + slideInVertically(
-                    animationSpec = tween(500),
-                    initialOffsetY = { it / 10 },
-                ),
+                visible = isVisible,
+                enter = fadeIn(tween(500)) +
+                        slideInVertically(
+                            animationSpec = tween(500),
+                            initialOffsetY = { it / 10 },
+                        ),
                 exit = fadeOut(tween(500)),
             ) {
                 UserInfo(mainState.user)
             }
 
             AnimatedVisibility(
-                visibleState = animationState,
-                enter = fadeIn(
-                    tween(500, 200)
-                ) + slideInVertically(
-                    animationSpec = tween(500, 200),
-                    initialOffsetY = { it / 10 },
-                ),
+                visible = isVisible,
+                enter = fadeIn(tween(500, 500)) +
+                        slideInVertically(
+                            animationSpec = tween(500, 500),
+                            initialOffsetY = { it / 10 },
+                        ),
                 exit = fadeOut(tween(500)),
             ) {
                 RepoList(mainState.repos) {
