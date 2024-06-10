@@ -41,9 +41,14 @@ data class GitHubRepo(
         }
 
         fun fromJson(jsonObject: JSONObject): GitHubRepo {
+            val description = if (jsonObject.isNull("description")) {
+                ""
+            } else {
+                jsonObject.getString("description")
+            }
             return GitHubRepo(
                 name = jsonObject.optString("name"),
-                description = jsonObject.optString("description", ""),
+                description = description,
                 lastUpdated = jsonObject.optString("updated_at"),
                 stars = jsonObject.optInt("stargazers_count"),
                 forks = jsonObject.optInt("forks"),
