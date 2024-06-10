@@ -43,7 +43,7 @@ data class GitHubRepo(
         fun fromJson(jsonObject: JSONObject): GitHubRepo {
             return GitHubRepo(
                 name = jsonObject.optString("name"),
-                description = jsonObject.optString("description"),
+                description = jsonObject.optString("description", ""),
                 lastUpdated = jsonObject.optString("updated_at"),
                 stars = jsonObject.optInt("stargazers_count"),
                 forks = jsonObject.optInt("forks"),
