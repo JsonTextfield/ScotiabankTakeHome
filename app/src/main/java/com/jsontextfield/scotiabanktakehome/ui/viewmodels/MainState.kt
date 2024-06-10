@@ -1,4 +1,4 @@
-package com.jsontextfield.scotiabanktakehome
+package com.jsontextfield.scotiabanktakehome.ui.viewmodels
 
 import com.jsontextfield.scotiabanktakehome.entities.GitHubRepo
 import com.jsontextfield.scotiabanktakehome.entities.GitHubUser

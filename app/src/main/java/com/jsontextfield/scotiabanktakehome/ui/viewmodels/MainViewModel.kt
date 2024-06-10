@@ -1,7 +1,8 @@
-package com.jsontextfield.scotiabanktakehome
+package com.jsontextfield.scotiabanktakehome.ui.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.jsontextfield.scotiabanktakehome.util.Downloader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

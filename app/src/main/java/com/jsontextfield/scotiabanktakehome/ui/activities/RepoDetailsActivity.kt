@@ -1,4 +1,4 @@
-package com.jsontextfield.scotiabanktakehome
+package com.jsontextfield.scotiabanktakehome.ui.activities
 
 import android.os.Build
 import android.os.Bundle

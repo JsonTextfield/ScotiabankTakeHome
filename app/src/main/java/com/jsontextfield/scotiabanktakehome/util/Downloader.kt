@@ -1,4 +1,4 @@
-package com.jsontextfield.scotiabanktakehome
+package com.jsontextfield.scotiabanktakehome.util
 
 import android.content.Context
 import android.util.Log
