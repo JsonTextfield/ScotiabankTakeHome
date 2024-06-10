@@ -44,7 +44,7 @@ data class GitHubRepo(
             val description = if (jsonObject.isNull("description")) {
                 ""
             } else {
-                jsonObject.getString("description")
+                jsonObject.optString("description")
             }
             return GitHubRepo(
                 name = jsonObject.optString("name"),

@@ -81,7 +81,21 @@ class GitHubRepoTest {
      */
     @Test
     fun testFromJsonInvalidKeys() {
+        val jsonObject = JSONObject().apply {
+            put("_name", "my-repo")
+            put("_description", "this is a test of my repo")
+            put("_updated_at", "yesterday")
+            put("_stargazers_count", 1337)
+            put("_forks", 1024)
+        }
 
+        val repo = GitHubRepo.fromJson(jsonObject)
+
+        assertEquals("", repo.name)
+        assertEquals("", repo.description)
+        assertEquals("", repo.lastUpdated)
+        assertEquals(0, repo.stars)
+        assertEquals(0, repo.forks)
     }
 
     /**
@@ -89,6 +103,19 @@ class GitHubRepoTest {
      */
     @Test
     fun testFromJsonInvalidValues() {
+        val jsonObject = JSONObject().apply {
+            put("name", 0)
+            put("description", true)
+            put("updated_at", 12.34)
+            put("stargazers_count", "zero")
+            put("forks", JSONObject.NULL)
+        }
+        val repo = GitHubRepo.fromJson(jsonObject)
 
+        assertEquals("0", repo.name)
+        assertEquals("true", repo.description)
+        assertEquals("12.34", repo.lastUpdated)
+        assertEquals(0, repo.stars)
+        assertEquals(0, repo.forks)
     }
 }
