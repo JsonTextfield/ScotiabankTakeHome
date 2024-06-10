@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ScotiabankTakeHome</string>
+    <string name="app_name">Take Home</string>
     <string name="title_activity_repo_details">RepoDetailsActivity</string>
     <string name="search">Search</string>
     <string name="clear">Clear</string>
