@@ -77,6 +77,7 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                 onSearchButtonPressed = {
                     scope.launch {
                         isVisible = false
+                        // delay to let the animations complete before calling the view model functions
                         delay(500)
                         mainViewModel.getUserData(context)
                         mainViewModel.getUserRepos(context)

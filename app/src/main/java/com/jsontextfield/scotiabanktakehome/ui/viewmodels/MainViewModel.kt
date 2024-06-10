@@ -38,7 +38,8 @@ class MainViewModel : ViewModel() {
 
     fun getUserRepos(context: Context) {
         Downloader.downloadGitHubUserRepos(
-            context, _mainState.value.searchText,
+            context,
+            _mainState.value.searchText,
             onComplete = { repos ->
                 _mainState.update {
                     it.copy(
