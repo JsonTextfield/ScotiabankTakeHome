@@ -28,7 +28,10 @@ class GitHubUserTest {
      */
     @Test
     fun testFromJsonEquality() {
-        val user1 = GitHubUser("Jason Bromfield", "someUrl")
+        val user1 = GitHubUser(
+            name = "Jason Bromfield",
+            avatarUrl = "someUrl",
+        )
 
         val jsonObject = JSONObject().apply {
             put("name", "Jason Bromfield")
