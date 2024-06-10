@@ -20,19 +20,20 @@ import com.jsontextfield.scotiabanktakehome.R
 import com.jsontextfield.scotiabanktakehome.entities.GitHubRepo
 
 @Composable
-fun RepoDetails(repo: GitHubRepo, modifier: Modifier = Modifier) {
+fun RepoDetails(repo: GitHubRepo, totalForks: Int, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.padding(20.dp),
         verticalArrangement = Arrangement.SpaceAround,
     ) {
-        if (repo.description != "null" && repo.description.isNotBlank()) {
+        if (repo.description.isNotBlank()) {
             Text(repo.description)
         }
         Text(stringResource(id = R.string.last_updated, repo.lastUpdated))
         Text(pluralStringResource(id = R.plurals.stars, count = repo.stars, repo.stars))
         Row {
-            Text(pluralStringResource(id = R.plurals.forks, count = repo.forks, repo.forks))
-            if (repo.forks > 5000) {
+            Text(pluralStringResource(id = R.plurals.forks, count = totalForks, totalForks))
+            // show a red star if the number of forks are greater than 5000
+            if (totalForks > 5000) {
                 Spacer(modifier = Modifier.width(10.dp))
                 Icon(Icons.Rounded.Star, null, tint = Color.Red)
             }
