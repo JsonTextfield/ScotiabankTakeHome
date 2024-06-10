@@ -9,7 +9,7 @@ data class GitHubUser(
     companion object {
         fun fromJson(jsonObject: JSONObject): GitHubUser {
             return GitHubUser(
-                name = jsonObject.optString("login"),
+                name = jsonObject.optString("name"),
                 avatarUrl = jsonObject.optString("avatar_url"),
             )
         }
