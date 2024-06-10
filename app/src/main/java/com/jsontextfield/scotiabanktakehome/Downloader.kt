@@ -8,9 +8,18 @@ import com.android.volley.toolbox.Volley
 import com.jsontextfield.scotiabanktakehome.entities.GitHubRepo
 import com.jsontextfield.scotiabanktakehome.entities.GitHubUser
 
+/**
+ * Singleton for downloading JSON data from GitHub
+ */
 object Downloader {
-    private const val TAG = "Volley"
+    private const val TAG = "Downloader"
 
+    /**
+     * Downloads GitHub user data
+     * @param context a Context to be used by Volley
+     * @param id a String that represents the username
+     * @param onComplete a function that is called when data is successfully downloaded
+     */
     fun downloadGitHubUserData(
         context: Context,
         id: String,
@@ -25,6 +34,12 @@ object Downloader {
         Volley.newRequestQueue(context).add(jsonObjectRequest)
     }
 
+    /**
+     * Downloads a GitHub user's repo info
+     * @param context a Context to be used by Volley
+     * @param id a String that represents the username
+     * @param onComplete a function that is called when data is successfully downloaded
+     */
     fun downloadGitHubUserRepos(
         context: Context,
         id: String,
