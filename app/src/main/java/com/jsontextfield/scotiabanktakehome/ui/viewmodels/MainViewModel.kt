@@ -1,6 +1,5 @@
 package com.jsontextfield.scotiabanktakehome.ui.viewmodels
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.jsontextfield.scotiabanktakehome.util.Downloader
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +17,8 @@ class MainViewModel : ViewModel() {
         _mainState.update { it.copy(searchText = newText) }
     }
 
-    fun getUserData(context: Context) {
+    fun getUserData() {
         Downloader.downloadGitHubUserData(
-            context,
             _mainState.value.searchText,
             onComplete = { user ->
                 _mainState.update {
@@ -36,9 +34,8 @@ class MainViewModel : ViewModel() {
         )
     }
 
-    fun getUserRepos(context: Context) {
+    fun getUserRepos() {
         Downloader.downloadGitHubUserRepos(
-            context,
             _mainState.value.searchText,
             onComplete = { repos ->
                 _mainState.update {
