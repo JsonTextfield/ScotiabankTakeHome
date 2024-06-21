@@ -30,8 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.jsontextfield.scotiabanktakehome.R
 import com.jsontextfield.scotiabanktakehome.ui.components.RepoList
 import com.jsontextfield.scotiabanktakehome.ui.components.SearchBar
@@ -45,7 +43,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     mainViewModel: MainViewModel = viewModel(),
-    navController: NavController = rememberNavController(),
+    onNavigateToRepo: (String) -> Unit = {},
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -110,9 +108,7 @@ fun MainScreen(
                         ),
                 exit = fadeOut(tween(500)),
             ) {
-                RepoList(repos) {
-                    navController.navigate("repo/${it.name}")
-                }
+                RepoList(repos) { onNavigateToRepo(it.name) }
             }
         }
     }
