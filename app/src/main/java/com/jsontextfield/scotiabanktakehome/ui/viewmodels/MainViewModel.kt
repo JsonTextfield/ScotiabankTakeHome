@@ -1,56 +1,53 @@
 package com.jsontextfield.scotiabanktakehome.ui.viewmodels
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.jsontextfield.scotiabanktakehome.util.Downloader
+import androidx.lifecycle.viewModelScope
+import com.jsontextfield.scotiabanktakehome.data.model.GitHubRepo
+import com.jsontextfield.scotiabanktakehome.data.model.GitHubUser
+import com.jsontextfield.scotiabanktakehome.data.repositories.GitHubRepoRepository
+import com.jsontextfield.scotiabanktakehome.data.repositories.GitHubUserRepository
+import com.jsontextfield.scotiabanktakehome.data.repositories.Repository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val gitHubUserRepository: Repository<GitHubUser?> = GitHubUserRepository(),
+    private val gitHubRepoRepository: Repository<List<GitHubRepo>> = GitHubRepoRepository(),
+) :
+    ViewModel() {
 
-    private var _mainState: MutableStateFlow<MainState> = MutableStateFlow(MainState())
+    private val _searchText: MutableStateFlow<String> = MutableStateFlow("")
+    val searchText: StateFlow<String> get() = _searchText.asStateFlow()
 
-    val mainState: StateFlow<MainState>
-        get() = _mainState
+    private val _userData: MutableStateFlow<GitHubUser?> = MutableStateFlow(null)
+    val userData: StateFlow<GitHubUser?> get() = _userData.asStateFlow()
+
+    private val _repos: MutableStateFlow<List<GitHubRepo>> = MutableStateFlow(emptyList())
+    val repos: StateFlow<List<GitHubRepo>> get() = _repos.asStateFlow()
+
+    fun getTotalForks(): Int {
+        return _repos.value
+            .map { repo -> repo.forks }
+            .reduce { a, b -> a + b }
+    }
 
     fun onSearchTextChanged(newText: String) {
-        _mainState.update { it.copy(searchText = newText) }
+        _searchText.value = newText
     }
 
-    fun getUserData(context: Context) {
-        Downloader.downloadGitHubUserData(
-            context,
-            _mainState.value.searchText,
-            onComplete = { user ->
-                _mainState.update {
-                    it.copy(
-                        user = user,
-                        lastUpdated = System.currentTimeMillis(),
-                    )
-                }
-            },
-            onError = {
-                // update the UI state to show an error
-            },
-        )
+    fun getUserData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _userData.value = gitHubUserRepository.getData(_searchText.value)
+        }
     }
 
-    fun getUserRepos(context: Context) {
-        Downloader.downloadGitHubUserRepos(
-            context,
-            _mainState.value.searchText,
-            onComplete = { repos ->
-                _mainState.update {
-                    it.copy(
-                        repos = repos,
-                        lastUpdated = System.currentTimeMillis(),
-                    )
-                }
-            },
-            onError = {
-                // update the UI state to show an error
-            },
-        )
+    fun getUserRepos() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getUserData()
+            _repos.value = gitHubRepoRepository.getData(_searchText.value)
+        }
     }
 }

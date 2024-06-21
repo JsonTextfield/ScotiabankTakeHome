@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.jsontextfield.scotiabanktakehome.entities.GitHubUser
+import com.jsontextfield.scotiabanktakehome.data.model.GitHubUser
 
 @Composable
 fun UserInfo(userData: GitHubUser? = null) {

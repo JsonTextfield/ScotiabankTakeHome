@@ -1,4 +1,4 @@
-package com.jsontextfield.scotiabanktakehome.entities
+package com.jsontextfield.scotiabanktakehome.data.model
 
 import org.json.JSONObject
 
