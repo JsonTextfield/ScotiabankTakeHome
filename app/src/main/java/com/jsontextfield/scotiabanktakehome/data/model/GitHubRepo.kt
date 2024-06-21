@@ -1,4 +1,4 @@
-package com.jsontextfield.scotiabanktakehome.entities
+package com.jsontextfield.scotiabanktakehome.data.model
 
 import android.os.Parcel
 import android.os.Parcelable
