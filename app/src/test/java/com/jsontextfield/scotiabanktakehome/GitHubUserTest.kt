@@ -1,6 +1,6 @@
 package com.jsontextfield.scotiabanktakehome
 
-import com.jsontextfield.scotiabanktakehome.entities.GitHubUser
+import com.jsontextfield.scotiabanktakehome.data.model.GitHubUser
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
