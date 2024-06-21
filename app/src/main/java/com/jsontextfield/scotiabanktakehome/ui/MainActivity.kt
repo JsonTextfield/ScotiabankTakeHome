@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     composable("main") {
                         MainScreen(
                             mainViewModel = viewModel,
-                            navController = navController,
+                            onNavigateToRepo = { navController.navigate("repo/$it") },
                         )
                     }
                     composable(
@@ -44,9 +44,9 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
                         val repos by viewModel.repos.collectAsStateWithLifecycle()
                         RepoDetailsScreen(
-                            mainViewModel = viewModel,
-                            navController = navController,
-                            repo = repos.find { it.name == backStackEntry.arguments?.getString("repo") }
+                            totalForks = viewModel.getTotalForks(),
+                            repo = repos.find { it.name == backStackEntry.arguments?.getString("repo") },
+                            onBackPressed = { navController.navigateUp() },
                         )
                     }
                 }

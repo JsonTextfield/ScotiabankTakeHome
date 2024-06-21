@@ -1,7 +1,5 @@
 package com.jsontextfield.scotiabanktakehome.data.model
 
-import android.os.Parcel
-import android.os.Parcelable
 import org.json.JSONObject
 
 data class GitHubRepo(
@@ -10,41 +8,14 @@ data class GitHubRepo(
     val lastUpdated: String = "",
     val stars: Int = 0,
     val forks: Int = 0,
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readInt(),
-        parcel.readInt(),
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
-        parcel.writeString(description)
-        parcel.writeString(lastUpdated)
-        parcel.writeInt(stars)
-        parcel.writeInt(forks)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<GitHubRepo> {
-        override fun createFromParcel(parcel: Parcel): GitHubRepo {
-            return GitHubRepo(parcel)
-        }
-
-        override fun newArray(size: Int): Array<GitHubRepo?> {
-            return arrayOfNulls(size)
-        }
-
+) {
+    companion object {
         fun fromJson(jsonObject: JSONObject): GitHubRepo {
             val description = if (jsonObject.isNull("description")) {
                 ""
-            } else {
-                jsonObject.optString("description")
+            }
+            else {
+                jsonObject.getString("description")
             }
             return GitHubRepo(
                 name = jsonObject.optString("name"),

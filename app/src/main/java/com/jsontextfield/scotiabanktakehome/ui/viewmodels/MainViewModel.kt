@@ -40,14 +40,13 @@ class MainViewModel(
 
     fun getUserData() {
         viewModelScope.launch(Dispatchers.IO) {
-            _userData.value = gitHubUserRepository.getData(_searchText.value)
+            _userData.emit(gitHubUserRepository.getData(_searchText.value))
         }
     }
 
     fun getUserRepos() {
         viewModelScope.launch(Dispatchers.IO) {
-            getUserData()
-            _repos.value = gitHubRepoRepository.getData(_searchText.value)
+            _repos.emit(gitHubRepoRepository.getData(_searchText.value))
         }
     }
 }
