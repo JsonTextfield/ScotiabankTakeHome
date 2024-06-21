@@ -10,40 +10,64 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.jsontextfield.scotiabanktakehome.R
-import com.jsontextfield.scotiabanktakehome.entities.GitHubRepo
-import com.jsontextfield.scotiabanktakehome.ui.components.BackButton
+import com.jsontextfield.scotiabanktakehome.data.model.GitHubRepo
+import com.jsontextfield.scotiabanktakehome.ui.viewmodels.MainViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun RepoDetailsScreen(
-    gitHubRepo: GitHubRepo? = null,
-    totalForks: Int = 0,
+    mainViewModel: MainViewModel = viewModel(),
+    navController: NavController = rememberNavController(),
+    repo: GitHubRepo? = null,
 ) {
+    var totalForks by remember { mutableIntStateOf(0) }
+    LaunchedEffect(Unit) {
+        totalForks = mainViewModel.getTotalForks()
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 modifier = Modifier.shadow(10.dp),
-                navigationIcon = { BackButton() },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            stringResource(id = R.string.back)
+                        )
+                    }
+                },
                 title = {
                     Text(
-                        gitHubRepo?.name ?: "",
+                        repo?.name ?: "",
                         maxLines = 1,
                         modifier = Modifier.basicMarquee(),
                     )
@@ -54,7 +78,7 @@ fun RepoDetailsScreen(
             )
         },
     ) { innerPadding ->
-        gitHubRepo?.let { repo ->
+        repo?.let { repo ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)

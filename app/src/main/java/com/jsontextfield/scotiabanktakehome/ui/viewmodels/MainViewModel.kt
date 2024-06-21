@@ -28,20 +28,26 @@ class MainViewModel(
     private val _repos: MutableStateFlow<List<GitHubRepo>> = MutableStateFlow(emptyList())
     val repos: StateFlow<List<GitHubRepo>> get() = _repos.asStateFlow()
 
+    fun getTotalForks(): Int {
+        return _repos.value
+            .map { repo -> repo.forks }
+            .reduce { a, b -> a + b }
+    }
+
     fun onSearchTextChanged(newText: String) {
         _searchText.value = newText
     }
 
     fun getUserData() {
         viewModelScope.launch(Dispatchers.IO) {
-            _userData.value = gitHubUserRepository.getData(searchText.value)
+            _userData.value = gitHubUserRepository.getData(_searchText.value)
         }
     }
 
     fun getUserRepos() {
         viewModelScope.launch(Dispatchers.IO) {
             getUserData()
-            _repos.value = gitHubRepoRepository.getData(searchText.value)
+            _repos.value = gitHubRepoRepository.getData(_searchText.value)
         }
     }
 }
