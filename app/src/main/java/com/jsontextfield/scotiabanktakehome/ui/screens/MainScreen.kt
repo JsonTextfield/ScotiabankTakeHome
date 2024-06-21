@@ -17,7 +17,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -66,9 +68,10 @@ fun MainScreen(
             val user by mainViewModel.userData.collectAsStateWithLifecycle()
             val repos by mainViewModel.repos.collectAsStateWithLifecycle()
             var isVisible: Boolean by rememberSaveable { mutableStateOf(false) }
+            var lastUpdated by remember { mutableLongStateOf(0L) }
 
-            LaunchedEffect(repos) {
-                delay(200)
+            LaunchedEffect(user, repos, lastUpdated) {
+                delay(500)
                 isVisible = true
             }
 
@@ -78,8 +81,10 @@ fun MainScreen(
                 onSearchButtonPressed = {
                     scope.launch {
                         isVisible = false
-                        // delay to let the animations complete before calling the view model functions
+                        delay(500)
+                        mainViewModel.getUserData()
                         mainViewModel.getUserRepos()
+                        lastUpdated = System.currentTimeMillis()
                     }
                 },
             )
